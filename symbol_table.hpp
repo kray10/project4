@@ -2,6 +2,7 @@
 #define LILC_SYMBOL_TABLE_HPP
 #include <unordered_map>
 #include <list>
+#include <iostream>
 
 namespace LILC{
 enum Kind {Var, Func, Struct, NotFound};

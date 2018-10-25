@@ -95,11 +95,11 @@ bool SymbolTable::addSymbol(std::string id, Kind kind, std::string type, int siz
 }
 
 std::string SymbolTable::findType(std::string id) {
-	for (std::list<ScopeTable *>::iterator
-		it=scopeTables->end();
-		it != scopeTables->begin(); --it){
-
-	  ScopeTable * elt = *it;
+	for (std::list<ScopeTable *>::reverse_iterator
+		it=scopeTables->rbegin();
+		it != scopeTables->rend(); ++it){
+			std::cout << "In findType\n";
+		ScopeTable * elt = *it;
 	  SymbolTableEntry* entry = elt->getEntry(id);
 		if (entry->getKind() != NotFound) {
 			return entry->getType();

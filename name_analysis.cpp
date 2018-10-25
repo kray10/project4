@@ -29,6 +29,7 @@ bool VarDeclNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool FormalsListNode::nameAnalysis(SymbolTable * symTab){
+	std::cout << "In FormalsListNode\n";
 	bool result = true;
 	for (std::list<FormalDeclNode *>::iterator
 		it=myFormals->begin();
@@ -37,6 +38,7 @@ bool FormalsListNode::nameAnalysis(SymbolTable * symTab){
 	  FormalDeclNode * elt = *it;
 	  result = result && elt->nameAnalysis(symTab);
 	}
+	return result;
 }
 
 bool ExpListNode::nameAnalysis(SymbolTable * symTab){
@@ -51,6 +53,7 @@ bool ExpListNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool StmtListNode::nameAnalysis(SymbolTable * symTab){
+	std::cout << "In StmtListNode\n";
 	bool result = true;
 	for (std::list<StmtNode *>::iterator
 		it=myStmts->begin();
@@ -59,9 +62,11 @@ bool StmtListNode::nameAnalysis(SymbolTable * symTab){
 	  StmtNode * elt = *it;
 	  result = result && elt->nameAnalysis(symTab);
 	}
+	return result;
 }
 
 bool FnBodyNode::nameAnalysis(SymbolTable * symTab){
+	std::cout << "In FnBodyNode\n";
 	myDeclList->nameAnalysis(symTab);
 	myStmtList->nameAnalysis(symTab);
 }
@@ -73,6 +78,7 @@ bool FnDeclNode::nameAnalysis(SymbolTable * symTab){
 		" you should also add and make current"
 		" a new scope table for my body\n";
 	bool result = symTab->addSymbol(myId->getId(), Func, myType->getType(), -1);
+	std::cout << result << "\n";
 	symTab->addScope();
 	result = result && myFormals->nameAnalysis(symTab);
 	result = result && myBody->nameAnalysis(symTab);
@@ -80,6 +86,7 @@ bool FnDeclNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool FormalDeclNode::nameAnalysis(SymbolTable * symTab){
+	std::cout << "In FormalDeclNode\n";
 	return symTab->addSymbol(myId->getId(), Var, myType->getType(), -1);
 	return true;
 }
@@ -122,6 +129,7 @@ bool StrLitNode::nameAnalysis(SymbolTable * symTab){
 bool IdNode::nameAnalysis(SymbolTable * symTab){
 	std::cout << "[DELETE ME] I'm a IdNode.\n";
 	myType = "(" + symTab->findType(myStrVal) + ")";
+	std::cout << myType << "\n";
 	return true;
 }
 
@@ -224,6 +232,7 @@ bool GreaterEqNode::nameAnalysis(SymbolTable * symTab){
 
 bool AssignStmtNode::nameAnalysis(SymbolTable * symTab){
 	std::cout << "[DELETE ME] I'm a AssignStmtNode.\n";
+	myAssign->nameAnalysis(symTab);
 	return true;
 }
 
