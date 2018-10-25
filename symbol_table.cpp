@@ -57,6 +57,11 @@ SymbolTableEntry* ScopeTable::getEntry(std::string id) {
 	return new SymbolTableEntry();
 }
 
+bool ScopeTable::exists(std::string id) {
+	auto entry = map->find(id);
+	return (entry != map->end());
+}
+
 SymbolTable::SymbolTable(){
 	//TODO: implement the list of hashtables
 	// approach to building a symbol table
@@ -75,7 +80,31 @@ void SymbolTable::dropScope() {
 }
 
 bool SymbolTable::addSymbol(std::string id, Kind kind, std::string type, int size) {
+	bool result = false;
+	for (std::list<ScopeTable *>::iterator
+		it=scopeTables->begin();
+		it != scopeTables->end(); ++it){
+
+	  ScopeTable * elt = *it;
+	  result = result || elt->exists(id);
+	}
+	if (result) {
+		return false;
+	}
 	return scopeTables->back()->addEntry(id, new SymbolTableEntry(id, kind, type, size));
+}
+
+std::string SymbolTable::findType(std::string id) {
+	for (std::list<ScopeTable *>::iterator
+		it=scopeTables->end();
+		it != scopeTables->begin(); --it){
+
+	  ScopeTable * elt = *it;
+	  SymbolTableEntry* entry = elt->getEntry(id);
+		if (entry->getKind() != NotFound) {
+			return entry->getType();
+		}
+	}
 }
 
 }

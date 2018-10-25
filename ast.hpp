@@ -184,6 +184,7 @@ class TypeNode : public ASTNode{
 public:
 	virtual void unparse(std::ostream& out, int indent) = 0;
 	virtual bool nameAnalysis(SymbolTable * symTab) = 0;
+	virtual std::string getType() = 0;
 };
 
 class IntNode : public TypeNode{
@@ -191,6 +192,7 @@ public:
 	IntNode(): TypeNode(){ }
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "int";}
 };
 
 class BoolNode : public TypeNode{
@@ -198,6 +200,7 @@ public:
 	BoolNode(): TypeNode(){ }
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "bool";}
 };
 
 class VoidNode : public TypeNode{
@@ -205,6 +208,7 @@ public:
 	VoidNode(): TypeNode(){ }
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "void";}
 };
 
 class StructNode : public TypeNode{
@@ -214,6 +218,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "struct";}
 private:
 	IdNode * myId;
 };
@@ -247,8 +252,10 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getId() {return myStrVal;}
 private:
 	std::string myStrVal;
+	std::string myType;
 };
 
 class TrueNode : public ExpNode{

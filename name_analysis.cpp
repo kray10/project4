@@ -4,6 +4,7 @@
 namespace LILC{
 
 bool ProgramNode::nameAnalysis(SymbolTable * symTab){
+	symTab->addScope();
 	this->myDeclList->nameAnalysis(symTab);
 }
 
@@ -23,7 +24,8 @@ bool VarDeclNode::nameAnalysis(SymbolTable * symTab){
 		" you should add the information from my"
 		" subtree to the to the symbol table"
 		" as a new entry in the current scope table\n";
-	return true;
+
+	return symTab->addSymbol(myId->getId(), Func, myType->getType(), mySize);
 }
 
 bool FormalsListNode::nameAnalysis(SymbolTable * symTab){
@@ -67,14 +69,18 @@ bool FnBodyNode::nameAnalysis(SymbolTable * symTab){
 bool FnDeclNode::nameAnalysis(SymbolTable * symTab){
 	std::cout << "[DELETE ME] I'm a fnDecl. "
 		" you should add my information to"
-		" the current scope table.\n";
+		" the current scope table.\n"
 		" you should also add and make current"
 		" a new scope table for my body\n";
-	return true;
+	bool result = symTab->addSymbol(myId->getId(), Func, myType->getType(), -1);
+	symTab->addScope();
+	result = result && myFormals->nameAnalysis(symTab);
+	result = result && myBody->nameAnalysis(symTab);
+	return result;
 }
 
 bool FormalDeclNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a FormalDeclNode.\n";
+	return symTab->addSymbol(myId->getId(), Var, myType->getType(), -1);
 	return true;
 }
 
@@ -115,6 +121,7 @@ bool StrLitNode::nameAnalysis(SymbolTable * symTab){
 
 bool IdNode::nameAnalysis(SymbolTable * symTab){
 	std::cout << "[DELETE ME] I'm a IdNode.\n";
+	myType = "(" + symTab->findType(myStrVal) + ")";
 	return true;
 }
 
@@ -135,6 +142,8 @@ bool DotAccessNode::nameAnalysis(SymbolTable * symTab){
 
 bool AssignNode::nameAnalysis(SymbolTable * symTab){
 	std::cout << "[DELETE ME] I'm a AssignNode.\n";
+	myExpLHS->nameAnalysis(symTab);
+	myExpRHS->nameAnalysis(symTab);
 	return true;
 }
 

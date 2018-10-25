@@ -7,7 +7,7 @@ void ProgramNode::unparse(std::ostream& out, int indent){
 }
 
 void DeclListNode::unparse(std::ostream& out, int indent){
-	for (std::list<DeclNode *>::iterator 
+	for (std::list<DeclNode *>::iterator
 		it=myDecls->begin();
 		it != myDecls->end(); ++it){
 	    DeclNode * elt = *it;
@@ -16,7 +16,7 @@ void DeclListNode::unparse(std::ostream& out, int indent){
 }
 
 void FormalsListNode::unparse(std::ostream& out, int indent){
-	for (std::list<FormalDeclNode *>::iterator 
+	for (std::list<FormalDeclNode *>::iterator
 		it=myFormals->begin();
 		it != myFormals->end(); ++it){
 	    FormalDeclNode * elt = *it;
@@ -184,6 +184,7 @@ void ReturnStmtNode::unparse(std::ostream& out, int indent){
 
 void IdNode::unparse(std::ostream& out, int indent){
 	out << myStrVal;
+	out << myType;
 }
 
 void IntNode::unparse(std::ostream& out, int indent){
