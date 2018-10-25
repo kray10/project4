@@ -45,6 +45,10 @@ ScopeTable::ScopeTable(){
 	map = new std::unordered_map<std::string, SymbolTableEntry *>();
 }
 
+bool ScopeTable::addEntry(std::string id, SymbolTableEntry* entry) {
+	return map->insert({id, entry}).second;
+}
+
 SymbolTableEntry* ScopeTable::getEntry(std::string id) {
 	auto entry = map->find(id);
 	if (entry != map->end()) {
@@ -68,6 +72,10 @@ void SymbolTable::dropScope() {
 	if (!scopeTables->empty()) {
 		scopeTables->pop_back();
 	}
+}
+
+bool SymbolTable::addSymbol(std::string id, Kind kind, std::string type, int size) {
+	return scopeTables->back()->addEntry(id, new SymbolTableEntry(id, kind, type, size));
 }
 
 }

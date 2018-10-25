@@ -35,6 +35,7 @@ class ScopeTable{
 		// that the symbol does not exist within
 		// the current scope
 		SymbolTableEntry* getEntry(std::string id);
+		bool addEntry(std::string id, SymbolTableEntry* entry);
 
 	private:
 		std::unordered_map<std::string, SymbolTableEntry *>* map;
@@ -49,6 +50,7 @@ class SymbolTable{
 		// etc.
 		void addScope();
 		void dropScope();
+		bool addSymbol(std::string id, Kind kind, std::string type, int size);
 
 	private:
 		std::list<ScopeTable *> * scopeTables;
