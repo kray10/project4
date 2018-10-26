@@ -20,16 +20,10 @@ bool DeclListNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool VarDeclNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a varDecl. "
-		" you should add the information from my"
-		" subtree to the to the symbol table"
-		" as a new entry in the current scope table\n";
-
 	return symTab->addSymbol(myId->getId(), Func, myType->getType(), mySize);
 }
 
 bool FormalsListNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "In FormalsListNode\n";
 	bool result = true;
 	for (std::list<FormalDeclNode *>::iterator
 		it=myFormals->begin();
@@ -50,10 +44,10 @@ bool ExpListNode::nameAnalysis(SymbolTable * symTab){
 	  ExpNode * elt = *it;
 	  result = result && elt->nameAnalysis(symTab);
 	}
+	return result;
 }
 
 bool StmtListNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "In StmtListNode\n";
 	bool result = true;
 	for (std::list<StmtNode *>::iterator
 		it=myStmts->begin();
@@ -66,33 +60,27 @@ bool StmtListNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool FnBodyNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "In FnBodyNode\n";
 	myDeclList->nameAnalysis(symTab);
 	myStmtList->nameAnalysis(symTab);
 }
 
 bool FnDeclNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a fnDecl. "
-		" you should add my information to"
-		" the current scope table.\n"
-		" you should also add and make current"
-		" a new scope table for my body\n";
-	bool result = symTab->addSymbol(myId->getId(), Func, myType->getType(), -1);
-	std::cout << result << "\n";
+	std::string type = myFormals->getTypes() + "->" + myType->getType();
+	bool result = symTab->addSymbol(myId->getId(), Func, type, -1);
 	symTab->addScope();
 	result = result && myFormals->nameAnalysis(symTab);
 	result = result && myBody->nameAnalysis(symTab);
+	symTab->dropScope();
 	return result;
 }
 
 bool FormalDeclNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "In FormalDeclNode\n";
 	return symTab->addSymbol(myId->getId(), Var, myType->getType(), -1);
-	return true;
 }
 
 bool StructDeclNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a StructDeclNode.\n";
+	bool result = symTab->addSymbol(myId->getId(), Struct, "struct", -1);
+	
 	return true;
 }
 
@@ -117,7 +105,6 @@ bool StructNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool IntLitNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a IntLitNode.\n";
 	return true;
 }
 
@@ -127,9 +114,7 @@ bool StrLitNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool IdNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a IdNode.\n";
 	myType = "(" + symTab->findType(myStrVal) + ")";
-	std::cout << myType << "\n";
 	return true;
 }
 
@@ -149,15 +134,15 @@ bool DotAccessNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool AssignNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a AssignNode.\n";
 	myExpLHS->nameAnalysis(symTab);
 	myExpRHS->nameAnalysis(symTab);
 	return true;
 }
 
 bool CallExpNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a CallExpNode.\n";
-	return true;
+	bool result = myId->nameAnalysis(symTab);
+	result = result && myExpList->nameAnalysis(symTab);
+	return result;
 }
 
 bool UnaryMinusNode::nameAnalysis(SymbolTable * symTab){
@@ -231,7 +216,6 @@ bool GreaterEqNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool AssignStmtNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a AssignStmtNode.\n";
 	myAssign->nameAnalysis(symTab);
 	return true;
 }
@@ -272,8 +256,7 @@ bool WhileStmtNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool CallStmtNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a CallStmtNode.\n";
-	return true;
+	return myCallExp->nameAnalysis(symTab);
 }
 
 bool ReturnStmtNode::nameAnalysis(SymbolTable * symTab){

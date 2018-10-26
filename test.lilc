@@ -1,5 +1,8 @@
-int main(){
+int main(int arg, bool r, void f){
 	int x;
 	x = 3;
 }
 
+bool g () {
+	main(a, b, c);
+}

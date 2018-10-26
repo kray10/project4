@@ -98,13 +98,13 @@ std::string SymbolTable::findType(std::string id) {
 	for (std::list<ScopeTable *>::reverse_iterator
 		it=scopeTables->rbegin();
 		it != scopeTables->rend(); ++it){
-			std::cout << "In findType\n";
 		ScopeTable * elt = *it;
 	  SymbolTableEntry* entry = elt->getEntry(id);
 		if (entry->getKind() != NotFound) {
 			return entry->getType();
 		}
 	}
+	return "Not Found";
 }
 
 }

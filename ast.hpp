@@ -93,6 +93,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getTypes();
 private:
 	std::list<FormalDeclNode *> * myFormals;
 };
@@ -150,6 +151,13 @@ private:
 	FnBodyNode * myBody;
 };
 
+class TypeNode : public ASTNode{
+public:
+	virtual void unparse(std::ostream& out, int indent) = 0;
+	virtual bool nameAnalysis(SymbolTable * symTab) = 0;
+	virtual std::string getType() = 0;
+};
+
 class FormalDeclNode : public DeclNode{
 public:
 	FormalDeclNode(TypeNode * type, IdNode * id) : DeclNode(){
@@ -158,7 +166,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
-
+	std::string getType() {return myType->getType();}
 private:
 	TypeNode * myType;
 	IdNode * myId;
@@ -177,14 +185,6 @@ public:
 private:
 	IdNode * myId;
 	DeclListNode * myDeclList;
-};
-
-
-class TypeNode : public ASTNode{
-public:
-	virtual void unparse(std::ostream& out, int indent) = 0;
-	virtual bool nameAnalysis(SymbolTable * symTab) = 0;
-	virtual std::string getType() = 0;
 };
 
 class IntNode : public TypeNode{
@@ -249,10 +249,11 @@ class IdNode : public ExpNode{
 public:
 	IdNode(IDToken * token) : ExpNode(){
 		myStrVal = token->value();
+		myType = "";
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
-	std::string getId() {return myStrVal;}
+	std::string getId();
 private:
 	std::string myStrVal;
 	std::string myType;

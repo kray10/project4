@@ -1,5 +1,9 @@
-int main()
+int main(int arg, bool r, void f)
 {
     int x;
     x(int) = 3;
+}
+bool g()
+{
+    main(int,bool,void->int)(a(Not Found), b(Not Found), c(Not Found));
 }

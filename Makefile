@@ -8,8 +8,8 @@ CXXSTD = -std=c++14
 CFLAGS = -O0 -g $(CSTD) 
 CXXFLAGS = -O0 -g $(CXXSTD)
 
-$(EXE): lilc_parser.o lilc_lexer.o lilc_compiler.o $(EXE).o unparse.o symbol_table.o name_analysis.o
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(EXE).o lilc_compiler.o lilc_parser.o lilc_lexer.o unparse.o symbol_table.o name_analysis.o
+$(EXE): lilc_parser.o lilc_lexer.o lilc_compiler.o $(EXE).o ast.o unparse.o symbol_table.o name_analysis.o
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(EXE).o lilc_compiler.o lilc_parser.o lilc_lexer.o ast.o unparse.o symbol_table.o name_analysis.o
 
 $(EXE).o: $(EXE).cpp
 	$(CXX) $(CXXFLAGS) -c $<
