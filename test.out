@@ -1,9 +1,18 @@
-int main(int arg, bool r, void f)
+struct Point
 {
     int x;
-    x(int) = 3;
-}
-bool g()
+    int y;
+};
+int f(int x, bool b)
 {
-    main(int,bool,void->int)(a(Not Found), b(Not Found), c(Not Found));
+}
+void g()
+{
+    int a;
+    bool b;
+    struct Point p;
+    p(Point).x = a(int);
+    b(bool) = (a == 3);
+    f(int,bool->int)((a + p.y * 2), b);
+    g();
 }

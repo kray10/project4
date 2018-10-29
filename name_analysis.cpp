@@ -79,9 +79,9 @@ bool FormalDeclNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool StructDeclNode::nameAnalysis(SymbolTable * symTab){
-	bool result = symTab->addSymbol(myId->getId(), Struct, "struct", -1);
-	
-	return true;
+	bool result = symTab->addSymbol(myId->getId(), Struct, myId->getId(), -1);
+	//result = result && myDeclList->nameAnalysis(symTab);
+	return result;
 }
 
 bool IntNode::nameAnalysis(SymbolTable * symTab){
@@ -115,6 +115,9 @@ bool StrLitNode::nameAnalysis(SymbolTable * symTab){
 
 bool IdNode::nameAnalysis(SymbolTable * symTab){
 	myType = "(" + symTab->findType(myStrVal) + ")";
+	if (myType.compare("")) {
+		return false;
+	}
 	return true;
 }
 
@@ -129,8 +132,8 @@ bool FalseNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool DotAccessNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a DotAccessNode.\n";
-	return true;
+	bool result = myExp->nameAnalysis(symTab);
+	return (result && myId->nameAnalysis(symTab));
 }
 
 bool AssignNode::nameAnalysis(SymbolTable * symTab){

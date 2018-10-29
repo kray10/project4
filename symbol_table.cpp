@@ -91,7 +91,7 @@ bool SymbolTable::addSymbol(std::string id, Kind kind, std::string type, int siz
 	if (result) {
 		return false;
 	}
-	return scopeTables->back()->addEntry(id, new SymbolTableEntry(id, kind, type, size));
+	return scopeTables->back()->addEntry(id, new SymbolTableEntry(id, kind, type, size));;
 }
 
 std::string SymbolTable::findType(std::string id) {
@@ -104,7 +104,7 @@ std::string SymbolTable::findType(std::string id) {
 			return entry->getType();
 		}
 	}
-	return "Not Found";
+	return "";
 }
 
 }

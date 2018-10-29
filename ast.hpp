@@ -4,6 +4,7 @@
 #include <ostream>
 #include <list>
 #include "tokens.hpp"
+#include "symbol_table.hpp"
 
 namespace LILC{
 
@@ -211,6 +212,20 @@ public:
 	std::string getType() {return "void";}
 };
 
+class IdNode : public ExpNode{
+public:
+	IdNode(IDToken * token) : ExpNode(){
+		myStrVal = token->value();
+		myType = "";
+	}
+	void unparse(std::ostream& out, int indent);
+	bool nameAnalysis(SymbolTable * symTab);
+	std::string getId();
+private:
+	std::string myStrVal;
+	std::string myType;
+};
+
 class StructNode : public TypeNode{
 public:
 	StructNode(IdNode * id): TypeNode(){
@@ -218,7 +233,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
-	std::string getType() {return "struct";}
+	std::string getType() {return myId->getId();}
 private:
 	IdNode * myId;
 };
@@ -243,20 +258,6 @@ public:
 	bool nameAnalysis(SymbolTable * symTab);
 private:
 	 std::string myString;
-};
-
-class IdNode : public ExpNode{
-public:
-	IdNode(IDToken * token) : ExpNode(){
-		myStrVal = token->value();
-		myType = "";
-	}
-	void unparse(std::ostream& out, int indent);
-	bool nameAnalysis(SymbolTable * symTab);
-	std::string getId();
-private:
-	std::string myStrVal;
-	std::string myType;
 };
 
 class TrueNode : public ExpNode{
