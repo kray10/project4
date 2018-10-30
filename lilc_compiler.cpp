@@ -211,6 +211,8 @@ LILC::LilC_Compiler::nameAnalysis( const char * const infile, const char * const
 	symbolTable = new SymbolTable();
   bool result = this->astRoot->nameAnalysis(symbolTable);
   std::cout << "Name analysis resulted in " << result << "\n";
-  std::ofstream out(outfile);
-  this->astRoot->unparse(out, 0);
+  if (result) {
+    std::ofstream out(outfile);
+    this->astRoot->unparse(out, 0);
+  }
 }

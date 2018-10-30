@@ -21,7 +21,15 @@ bool DeclListNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool VarDeclNode::nameAnalysis(SymbolTable * symTab){
-	return symTab->addSymbol(myId->getId(), Func, myType->getType(), mySize);
+	bool result = symTab->addSymbol(myId->getId(), Var, myType->getType(), mySize);
+	if (!result) {
+		reportError("Multiply declared identifier", myId->getId());
+	}
+	if (myType->getType().compare("void")) {
+		reportError("Non-function declared void", myId->getId());
+		result = false;
+	}
+	return result;
 }
 
 bool FormalsListNode::nameAnalysis(SymbolTable * symTab){
@@ -117,6 +125,7 @@ bool StrLitNode::nameAnalysis(SymbolTable * symTab){
 bool IdNode::nameAnalysis(SymbolTable * symTab){
 	myEntry = symTab->findEntry(myStrVal);
 	if (myEntry->getKind() == NotFound) {
+		reportError("Undeclared identifier", myStrVal);
 		return false;
 	}
 	return true;
