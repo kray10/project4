@@ -17,6 +17,7 @@ bool DeclListNode::nameAnalysis(SymbolTable * symTab){
 	  DeclNode * elt = *it;
 	  result = result && elt->nameAnalysis(symTab);
 	}
+	return result;
 }
 
 bool VarDeclNode::nameAnalysis(SymbolTable * symTab){
@@ -80,7 +81,7 @@ bool FormalDeclNode::nameAnalysis(SymbolTable * symTab){
 
 bool StructDeclNode::nameAnalysis(SymbolTable * symTab){
 	bool result = symTab->addSymbol(myId->getId(), Struct, myId->getId(), -1);
-	//result = result && myDeclList->nameAnalysis(symTab);
+	result = result && myDeclList->nameAnalysis(symTab);
 	return result;
 }
 
@@ -114,8 +115,8 @@ bool StrLitNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool IdNode::nameAnalysis(SymbolTable * symTab){
-	myType = "(" + symTab->findType(myStrVal) + ")";
-	if (myType.compare("")) {
+	myEntry = symTab->findEntry(myStrVal);
+	if (myEntry->getKind() == NotFound) {
 		return false;
 	}
 	return true;
@@ -159,8 +160,8 @@ bool NotNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool PlusNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a PlusNode.\n";
-	return true;
+	bool result = myExp1->nameAnalysis(symTab);
+	return (result && myExp2->nameAnalysis(symTab));
 }
 
 bool MinusNode::nameAnalysis(SymbolTable * symTab){
@@ -169,8 +170,8 @@ bool MinusNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool TimesNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a TimesNode.\n";
-	return true;
+	bool result = myExp1->nameAnalysis(symTab);
+	return (result && myExp2->nameAnalysis(symTab));
 }
 
 bool DivideNode::nameAnalysis(SymbolTable * symTab){
@@ -189,8 +190,8 @@ bool OrNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool EqualsNode::nameAnalysis(SymbolTable * symTab){
-	std::cout << "[DELETE ME] I'm a EqualsNode.\n";
-	return true;
+	bool result = myExp1->nameAnalysis(symTab);
+	return (result && myExp2->nameAnalysis(symTab));
 }
 
 bool NotEqualsNode::nameAnalysis(SymbolTable * symTab){

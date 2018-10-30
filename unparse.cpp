@@ -184,7 +184,9 @@ void ReturnStmtNode::unparse(std::ostream& out, int indent){
 
 void IdNode::unparse(std::ostream& out, int indent){
 	out << myStrVal;
-	out << myType;
+	if (myEntry != nullptr) {
+		out << "(" << myEntry->getType() << ")";
+	}
 }
 
 void IntNode::unparse(std::ostream& out, int indent){

@@ -216,14 +216,14 @@ class IdNode : public ExpNode{
 public:
 	IdNode(IDToken * token) : ExpNode(){
 		myStrVal = token->value();
-		myType = "";
+		myEntry = nullptr;
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
 	std::string getId();
 private:
 	std::string myStrVal;
-	std::string myType;
+	SymbolTableEntry* myEntry;
 };
 
 class StructNode : public TypeNode{

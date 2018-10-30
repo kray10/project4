@@ -80,31 +80,20 @@ void SymbolTable::dropScope() {
 }
 
 bool SymbolTable::addSymbol(std::string id, Kind kind, std::string type, int size) {
-	bool result = false;
-	for (std::list<ScopeTable *>::iterator
-		it=scopeTables->begin();
-		it != scopeTables->end(); ++it){
-
-	  ScopeTable * elt = *it;
-	  result = result || elt->exists(id);
-	}
-	if (result) {
-		return false;
-	}
 	return scopeTables->back()->addEntry(id, new SymbolTableEntry(id, kind, type, size));;
 }
 
-std::string SymbolTable::findType(std::string id) {
+SymbolTableEntry* SymbolTable::findEntry(std::string id) {
 	for (std::list<ScopeTable *>::reverse_iterator
 		it=scopeTables->rbegin();
 		it != scopeTables->rend(); ++it){
 		ScopeTable * elt = *it;
 	  SymbolTableEntry* entry = elt->getEntry(id);
 		if (entry->getKind() != NotFound) {
-			return entry->getType();
+			return entry;
 		}
 	}
-	return "";
+	return new SymbolTableEntry();
 }
 
 }
