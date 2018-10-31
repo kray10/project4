@@ -6,12 +6,16 @@ SymbolTableEntry::SymbolTableEntry () {
 	this->kind = NotFound;
 	this->type = "";
 	this->size = 0;
+	structScope = new SymbolTable();
+	structScope->addScope();
 }
 SymbolTableEntry::SymbolTableEntry (std::string id, Kind kind, std::string type, int size) {
 		this->id = id;
 		this->kind = kind;
 		this->type = type;
 		this->size = size;
+		structScope = new SymbolTable();
+		structScope->addScope();
 }
 
 std::string SymbolTableEntry::getId() {
@@ -39,6 +43,10 @@ int SymbolTableEntry::getSize() {
 }
 void SymbolTableEntry::setSize(int size) {
 	this->size = size;
+}
+
+bool SymbolTableEntry::addToStructScope(std::string id, Kind kind, std::string type, int size) {
+	return structScope->addSymbol(id, kind, type, size);
 }
 
 ScopeTable::ScopeTable(){

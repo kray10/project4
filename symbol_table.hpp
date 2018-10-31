@@ -5,7 +5,7 @@
 #include <iostream>
 
 namespace LILC{
-class ScopeTable;
+class SymbolTable;
 enum Kind {Var, Func, Struct, NotFound};
 //A single entry for one name in the symbol table
 class SymbolTableEntry{
@@ -21,13 +21,16 @@ public:
 	void setType(std::string type);
 	int getSize();
 	void setSize(int size);
-	//bool addToStructScopt(std::string id, SymbolTableEntry* entry);
+	bool addToStructScope(std::string id, Kind kind, std::string type, int size);
+	SymbolTable* getStructScope() {
+		return structScope;
+	}
 private:
 	std::string id;
 	Kind kind;
 	std::string type;
 	int size;
-	//ScopeTable* structScope;
+	SymbolTable* structScope;
 };
 
 //A single

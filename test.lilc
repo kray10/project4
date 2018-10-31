@@ -6,7 +6,6 @@ int f(int x, bool b) { }
 void g() {
     int a;
     bool b;
-    void x;
     struct Point p;
     p.x = a;
     b = a == 3;

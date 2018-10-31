@@ -21,15 +21,27 @@ bool DeclListNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool VarDeclNode::nameAnalysis(SymbolTable * symTab){
-	bool result = symTab->addSymbol(myId->getId(), Var, myType->getType(), mySize);
-	if (!result) {
-		reportError("Multiply declared identifier", myId->getId());
+	if (mySize == NOT_STRUCT) {
+		bool result = symTab->addSymbol(myId->getId(), Var, myType->getType(), mySize);
+
+		if (!result) {
+			reportError("Multiply declared identifier", myId->getId());
+		}
+
+		if (myType->getType().compare("void") == 0) {
+			reportError("Non-function declared void", myId->getId());
+			result = false;
+		}
+
+		return result;
 	}
-	if (myType->getType().compare("void")) {
-		reportError("Non-function declared void", myId->getId());
-		result = false;
+
+	SymbolTableEntry* entry = symTab->findEntry(myType->getType());
+	if (entry->getKind() != Struct) {
+		reportError("Invalid name of struct type", myId->getId());
+		return false;
 	}
-	return result;
+	return symTab->addSymbol(myId->getId(), Var, myType->getType(), mySize);
 }
 
 bool FormalsListNode::nameAnalysis(SymbolTable * symTab){
@@ -89,7 +101,7 @@ bool FormalDeclNode::nameAnalysis(SymbolTable * symTab){
 
 bool StructDeclNode::nameAnalysis(SymbolTable * symTab){
 	bool result = symTab->addSymbol(myId->getId(), Struct, myId->getId(), -1);
-	result = result && myDeclList->nameAnalysis(symTab);
+	result = result && myDeclList->nameAnalysis(symTab->findEntry(myId->getId())->getStructScope());
 	return result;
 }
 
