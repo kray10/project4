@@ -1,21 +1,18 @@
-struct a
+struct Point
 {
     int x;
+    int y;
 };
-struct b
+int f(int x, bool b)
 {
-    struct a r;
-};
-struct c
-{
-    struct b r;
-};
-struct d
-{
-    struct c r;
-};
+}
 void g()
 {
-    struct d e;
-    e(d).r(c).r(b).r(a).x(int) = 5;
+    int a;
+    bool b;
+    struct Point p;
+    p(Point).x(int) = a(int);
+    b(bool) = (a(int) == 3);
+    f(int,bool->int)((a(int) + p(Point).y(int) * 2), b(bool));
+    g(->void)();
 }

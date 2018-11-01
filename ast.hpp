@@ -29,7 +29,7 @@ public:
 		for (int k = 0 ; k < indent; k++){ out << " "; }
 	}
 	void reportError(std::string error, std::string id) {
-		std::cout << "ERROR with ID " << id << ": " << error << "\n";
+		std::cout << " ***ERROR*** " << error << "\n";
 	}
 };
 
