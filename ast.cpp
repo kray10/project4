@@ -18,8 +18,12 @@ std::string FormalsListNode::getTypes() {
     return result;
 }
 
-	std::string IdNode::getId() {
+std::string IdNode::getId() {
   return myStrVal;
+}
+
+std::string DotAccessNode::getType() {
+  return myId->getId();
 }
 
 }

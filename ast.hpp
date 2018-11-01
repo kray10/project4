@@ -82,6 +82,7 @@ class ExpNode : public ASTNode{
 public:
 	virtual bool nameAnalysis(SymbolTable * symTab) = 0;
 	virtual void unparse(std::ostream& out, int indent) = 0;
+	virtual std::string getType() = 0;
 };
 
 class StmtNode : public ASTNode{
@@ -224,6 +225,7 @@ public:
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
 	std::string getId();
+	std::string getType() {return myStrVal;}
 private:
 	std::string myStrVal;
 	SymbolTableEntry* myEntry;
@@ -248,6 +250,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "int";}
 private:
 	int myInt;
 };
@@ -259,6 +262,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "string";}
 private:
 	 std::string myString;
 };
@@ -268,6 +272,7 @@ public:
 	TrueNode(): ExpNode(){ }
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "true";}
 private:
 };
 
@@ -276,6 +281,7 @@ public:
 	FalseNode(): ExpNode(){ }
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "false";}
 };
 
 class DotAccessNode : public ExpNode{
@@ -286,6 +292,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType();
 private:
 	ExpNode * myExp;
 	IdNode * myId;
@@ -299,6 +306,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "assign";}
 private:
 	ExpNode * myExpLHS;
 	ExpNode * myExpRHS;
@@ -312,6 +320,7 @@ public:
 	}
 	void unparse(std::ostream& out, int indent);
 	bool nameAnalysis(SymbolTable * symTab);
+	std::string getType() {return "call";}
 private:
 	IdNode * myId;
 	ExpListNode * myExpList;
@@ -321,6 +330,7 @@ class UnaryExpNode : public ExpNode{
 public:
 	virtual void unparse(std::ostream& out, int indent) = 0;
 	virtual bool nameAnalysis(SymbolTable * symTab)= 0;
+	std::string getType() {return "unary";}
 };
 
 class UnaryMinusNode : public UnaryExpNode{
@@ -349,6 +359,7 @@ class BinaryExpNode : public ExpNode{
 public:
 	virtual void unparse(std::ostream& out, int indent) = 0;
 	virtual bool nameAnalysis(SymbolTable * symTab) = 0;
+	std::string getType() {return "binary";}
 };
 
 class PlusNode : public BinaryExpNode{
