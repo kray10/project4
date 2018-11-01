@@ -18,6 +18,10 @@ SymbolTableEntry::SymbolTableEntry (std::string id, Kind kind, std::string type,
 		structScope->addScope();
 }
 
+void SymbolTableEntry::printEntry() {
+	std::cout << "Id: " << id << " ; Kind: " << kind << " ; Type: " << type << "\n";
+}
+
 std::string SymbolTableEntry::getId() {
 	return id;
 }
@@ -45,10 +49,6 @@ void SymbolTableEntry::setSize(int size) {
 	this->size = size;
 }
 
-bool SymbolTableEntry::addToStructScope(std::string id, Kind kind, std::string type, int size) {
-	return structScope->addSymbol(id, kind, type, size);
-}
-
 ScopeTable::ScopeTable(){
 	map = new std::unordered_map<std::string, SymbolTableEntry *>();
 }
@@ -74,6 +74,7 @@ SymbolTable::SymbolTable(){
 	//TODO: implement the list of hashtables
 	// approach to building a symbol table
 	scopeTables = new std::list<ScopeTable *>();
+	globalScope = nullptr;
 };
 
 void SymbolTable::addScope() {
@@ -102,6 +103,14 @@ SymbolTableEntry* SymbolTable::findEntry(std::string id) {
 		}
 	}
 	return new SymbolTableEntry();
+}
+
+SymbolTable* SymbolTable::getGlobalScope() {
+	return globalScope;
+}
+
+void SymbolTable::setGlobalScope(SymbolTable* table) {
+	globalScope = table;
 }
 
 }

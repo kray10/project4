@@ -36,7 +36,13 @@ bool VarDeclNode::nameAnalysis(SymbolTable * symTab){
 		return result;
 	}
 
-	SymbolTableEntry* entry = symTab->findEntry(myType->getType());
+	SymbolTableEntry* entry;
+	if (symTab->getGlobalScope() == nullptr) {
+		entry = symTab->findEntry(myType->getType());
+	} else {
+		entry = symTab->getGlobalScope()->findEntry(myType->getType());
+	}
+
 	if (entry->getKind() != Struct) {
 		reportError("Invalid name of struct type", myId->getId());
 		return false;
@@ -100,8 +106,10 @@ bool FormalDeclNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool StructDeclNode::nameAnalysis(SymbolTable * symTab){
-	bool result = symTab->addSymbol(myId->getId(), Struct, myId->getId(), -1);
-	result = result && myDeclList->nameAnalysis(symTab->findEntry(myId->getId())->getStructScope());
+	bool result = symTab->addSymbol(myId->getId(), Struct, "struct", -1);
+	SymbolTable* structTable = symTab->findEntry(myId->getId())->getStructScope();
+	structTable->setGlobalScope(symTab);
+	result = result && myDeclList->nameAnalysis(structTable);
 	return result;
 }
 
@@ -162,22 +170,27 @@ bool FalseNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool DotAccessNode::nameAnalysis(SymbolTable * symTab){
-	bool result = true;
-	std::string type = myExp->getType();
-	SymbolTableEntry* entry = symTab->findEntry(type);
-	if (entry->getKind() != Struct) {
-		reportError("Dot‑access of non‑struct type", type);
+	bool result = myExp->nameAnalysis(symTab);
+	structEntry = myExp->getEntry();
+	if (structEntry->getKind() != Struct) {
+		reportError("Dot‑access of non‑struct type", structEntry->getId());
 		result = false;
+	}
+	if (structEntry->getType().compare("struct") != 0) {
+		structEntry = symTab->findEntry(structEntry->getType());
 	}
 
-	SymbolTableEntry* structEntry = symTab->findEntry(entry->getType());
-	SymbolTableEntry* structVar = structEntry->getStructScope()->findEntry(myId->getId());
-	if (structEntry->getKind() == NotFound) {
+
+	SymbolTableEntry* entry = structEntry->getStructScope()->findEntry(myId->getId());
+	if (entry->getKind() == NotFound) {
 		reportError("Invalid struct field name", myId->getId());
 		result = false;
+	} else {
+		result = result && myId->nameAnalysis(structEntry->getStructScope());
 	}
-	result = result && myExp->nameAnalysis(symTab);
-	return (result && myId->nameAnalysis(structEntry->getStructScope()));
+	structEntry = symTab->findEntry(entry->getType());
+
+	return result;
 }
 
 bool AssignNode::nameAnalysis(SymbolTable * symTab){

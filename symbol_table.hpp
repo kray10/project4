@@ -21,7 +21,7 @@ public:
 	void setType(std::string type);
 	int getSize();
 	void setSize(int size);
-	bool addToStructScope(std::string id, Kind kind, std::string type, int size);
+	void printEntry();
 	SymbolTable* getStructScope() {
 		return structScope;
 	}
@@ -63,9 +63,12 @@ class SymbolTable{
 		// false if already exists
 		bool addSymbol(std::string id, Kind kind, std::string type, int size);
 		SymbolTableEntry* findEntry(std::string id);
+		SymbolTable* getGlobalScope();
+		void setGlobalScope(SymbolTable* table);
 
 	private:
 		std::list<ScopeTable *> * scopeTables;
+		SymbolTable* globalScope;
 };
 
 }
