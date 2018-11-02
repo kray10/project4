@@ -114,37 +114,26 @@ bool StructDeclNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool IntNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
-	std::cout << "[DELETE ME] I'm a IntNode.\n";
 	return true;
 }
 
 bool BoolNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
-	std::cout << "[DELETE ME] I'm a BoolNode.\n";
 	return true;
 }
 
 bool VoidNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
-	std::cout << "[DELETE ME] I'm a VoidNode.\n";
 	return true;
 }
 
 bool StructNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
-	std::cout << "[DELETE ME] I'm a StructNode.\n";
 	return true;
 }
 
 bool IntLitNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
 	return true;
 }
 
 bool StrLitNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
-	std::cout << "[DELETE ME] I'm a StrLitNode.\n";
 	return true;
 }
 
@@ -158,22 +147,21 @@ bool IdNode::nameAnalysis(SymbolTable * symTab){
 }
 
 bool TrueNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
-	std::cout << "[DELETE ME] I'm a TrueNode.\n";
 	return true;
 }
 
 bool FalseNode::nameAnalysis(SymbolTable * symTab){
-	//Should be taken care of
-	std::cout << "[DELETE ME] I'm a FalseNode.\n";
 	return true;
 }
 
 bool DotAccessNode::nameAnalysis(SymbolTable * symTab){
 	bool result = myExp->nameAnalysis(symTab);
 	structEntry = myExp->getEntry();
+	if (structEntry->getKind() == NotFound) {
+		return false;
+	}
 	if (structEntry->getKind() != Struct) {
-		reportError("Dot‑access of non‑struct type", structEntry->getId());
+		reportError("Dot-access of non-struct type", structEntry->getId());
 		result = false;
 	}
 	if (structEntry->getType().compare("struct") != 0) {

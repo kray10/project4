@@ -18,10 +18,6 @@ SymbolTableEntry::SymbolTableEntry (std::string id, Kind kind, std::string type,
 		structScope->addScope();
 }
 
-void SymbolTableEntry::printEntry() {
-	std::cout << "Id: " << id << " ; Kind: " << kind << " ; Type: " << type << "\n";
-}
-
 std::string SymbolTableEntry::getId() {
 	return id;
 }

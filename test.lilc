@@ -1,14 +1,18 @@
-struct Point {
+struct a {
     int x;
-    int y;
 };
-int f(int x, bool b) { }
+struct b {
+    struct a x;
+};
+struct c {
+    struct b x;
+};
+struct d {
+    struct c x;
+};
 void g() {
-    int a;
-    bool b;
-    struct Point p;
-    p.x = a;
-    b = a == 3;
-    f(a + p.y*2, b);
-    g();
+struct d x;
+int y;
+x.y.x.x = 5;
+y.y =7;
 }

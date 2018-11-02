@@ -21,7 +21,6 @@ public:
 	void setType(std::string type);
 	int getSize();
 	void setSize(int size);
-	void printEntry();
 	SymbolTable* getStructScope() {
 		return structScope;
 	}
